@@ -27,7 +27,7 @@ log = logging.getLogger(__name__)
 
 # Yaml module configuration
 
-ruamel_yaml=YAML()
+ruamel_yaml=YAML(typ="safe")  # CLoader
 
 def _config_yaml(yaml):
 
