@@ -15,15 +15,19 @@ import logging
 import nose
 import numpy as np
 import yaml
+from ruamel.yaml import YAML
 
 from openfisca_core import conv, periods, scenarios
 from openfisca_core.tools import assert_near
 from openfisca_core.commons import unicode_type, to_unicode
 
+
 log = logging.getLogger(__name__)
+
 
 # Yaml module configuration
 
+ruamel_yaml=YAML()
 
 def _config_yaml(yaml):
 
@@ -175,7 +179,7 @@ def _parse_test_file(tax_benefit_system, yaml_path):
     filename = os.path.splitext(os.path.basename(yaml_path))[0]
     with open(yaml_path) as yaml_file:
         try:
-            tests = yaml.load(yaml_file)
+            tests = ruamel_yaml.load(yaml_file)
         except yaml.scanner.ScannerError:
             log.error("{} is not a valid YAML file".format(yaml_path).encode('utf-8'))
             raise

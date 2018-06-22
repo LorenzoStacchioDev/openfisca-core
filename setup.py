@@ -31,6 +31,7 @@ setup(
     extras_require = {
         'test': [
             'nose',
+            'ruamel.yaml',
             'flake8 >= 3.4.0, < 3.5.0',
             'openfisca-country-template >= 3.0.0, < 4.0.0',
             'openfisca-extension-template >= 1.1.3, < 2.0.0',
