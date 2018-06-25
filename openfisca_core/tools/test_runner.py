@@ -16,7 +16,6 @@ import nose
 import numpy as np
 
 import yaml
-from yaml import load, dump
 try:
     from yaml import CLoader as Loader, CDumper as Dumper
 except ImportError:
