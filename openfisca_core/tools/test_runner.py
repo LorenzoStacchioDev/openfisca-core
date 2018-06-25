@@ -14,7 +14,13 @@ import logging
 
 import nose
 import numpy as np
+
 import yaml
+from yaml import load, dump
+try:
+    from yaml import CLoader as Loader, CDumper as Dumper
+except ImportError:
+    from yaml import Loader, Dumper
 
 from openfisca_core import conv, periods, scenarios
 from openfisca_core.tools import assert_near
@@ -176,7 +182,7 @@ def _parse_test_file(tax_benefit_system, yaml_path):
     filename = os.path.splitext(os.path.basename(yaml_path))[0]
     with open(yaml_path) as yaml_file:
         try:
-            tests = yaml.load(yaml_file, Loader=yaml.CLoader)
+            tests = yaml.load(yaml_file, Loader=Loader)
         except yaml.scanner.ScannerError:
             log.error("{} is not a valid YAML file".format(yaml_path).encode('utf-8'))
             raise
@@ -192,7 +198,7 @@ def _parse_test_file(tax_benefit_system, yaml_path):
     if error is not None:
         embedding_error = conv.embed_error(tests, u'errors', error)
         assert embedding_error is None, embedding_error
-        raise ValueError("Error in test {}:\n{}".format(yaml_path, yaml.dump(tests, allow_unicode = True,
+        raise ValueError("Error in test {}:\n{}".format(yaml_path, yaml.dump(tests, Dumper=Dumper, allow_unicode = True,
             default_flow_style = False, indent = 2, width = 120)))
 
     for test in tests:
@@ -216,7 +222,7 @@ def _parse_test_file(tax_benefit_system, yaml_path):
             embedding_error = conv.embed_error(test, u'errors', error)
             assert embedding_error is None, embedding_error
             raise ValueError("Error in test {}:\n{}\nYaml test content: \n{}\n".format(
-                yaml_path, error, yaml.dump(test, allow_unicode = True,
+                yaml_path, error, yaml.dump(test, Dumper=Dumper, allow_unicode = True,
                 default_flow_style = False, indent = 2, width = 120)))
 
         yield yaml_path, test.get('name') or filename, to_unicode(test['scenario'].period), test
